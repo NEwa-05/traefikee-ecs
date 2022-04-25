@@ -1,8 +1,8 @@
 # Traefik Enterprise on ECS EC2
 
+<!-- 
 ## add service discovery
 
-<!-- 
 Traefik is not working with service discovery since SRV dns record is mandatory for EC2 instances
 
 ```bash
