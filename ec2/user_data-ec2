@@ -1,2 +1,2 @@
 #!/bin/bash
-echo ECS_CLUSTER=dbl-ecs-ec2 >> /etc/ecs/ecs.config
+echo ECS_CLUSTER=ecs-ec2 >> /etc/ecs/ecs.config

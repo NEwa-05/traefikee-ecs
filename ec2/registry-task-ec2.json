@@ -30,11 +30,11 @@
             "secrets": [
                 {
                     "name": "TRAEFIKEE_JOIN_TOKEN",
-                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:dbl-traefikee-secret-cWNokO:TRAEFIKEE_PRX_JOIN_TOKEN::"
+                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:traefikee-secret-cWNokO:TRAEFIKEE_PRX_JOIN_TOKEN::"
                 },
                 {
                     "name": "TRAEFIKEE_PLUGIN_TOKEN",
-                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:dbl-traefikee-secret-cWNokO:TRAEFIKEE_PLUGIN_TOKEN::"
+                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:traefikee-secret-cWNokO:TRAEFIKEE_PLUGIN_TOKEN::"
                 }
             ],
             "volumesFrom": [],
