@@ -1,0 +1,13 @@
+{
+  "serviceName": "traefikee-controller",
+  "taskDefinition": "ec2-traefikee",
+  "desiredCount": 1,
+  "launchType": "EC2",    
+  "schedulingStrategy": "REPLICA",
+  "placementConstraints": [
+    {
+      "expression": "attribute:controller == true",
+      "type": "memberOf"
+    }
+  ]
+}

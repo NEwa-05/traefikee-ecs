@@ -1,0 +1,76 @@
+{
+    "family": "ec2-traefikee-prx",    
+    "taskRoleArn": "arn:aws:iam::${account-id}:role/TraefikECSReadAccessRole",
+    "executionRoleArn": "arn:aws:iam::${account-id}:role/ecsTaskExecutionRole",
+    "cpu": "512",
+    "memory": "1024",
+    "containerDefinitions": [
+        {
+            "name": "proxy",
+            "image": "traefik/traefikee:v2.6.1",
+            "cpu": 500,
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 443,
+                    "hostPort": 443,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 8484,
+                    "hostPort": 8484,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "command": [
+                "proxy",
+                "--role=ingress",
+                "--discovery.static.peers=${controller_instance_ip}:4242"
+            ],
+            "entryPoint": [],
+            "environment": [],
+            "environmentFiles": [],
+            "secrets": [
+                {
+                    "name": "TRAEFIKEE_JOIN_TOKEN",
+                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:dbl-traefikee-secret-cWNokO:TRAEFIKEE_PRX_JOIN_TOKEN::"
+                }
+            ],
+            "volumesFrom": [],
+            "dockerLabels": {
+                "com.traefik.traefikee.component": "proxy"
+            },
+            "mountPoints": [],
+            "dnsServers": [],
+            "dnsSearchDomains": [],
+            "extraHosts": [],
+            "dockerSecurityOptions": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "ecs/traefikee",
+                    "awslogs-region": "eu-north-1",
+                    "awslogs-stream-prefix": "proxy"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "volumes": [],
+    "placementConstraints": [],
+    "networkMode": "host",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": [
+        "EC2"
+    ]
+}

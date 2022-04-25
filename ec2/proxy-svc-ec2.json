@@ -1,0 +1,12 @@
+{
+    "serviceName": "traefikee-proxy",
+    "taskDefinition": "ec2-traefikee-prx",
+    "desiredCount": 2,
+    "launchType": "EC2",    
+    "schedulingStrategy": "REPLICA",
+    "placementConstraints": [
+      {
+        "type": "distinctInstance"
+      }
+    ]
+}

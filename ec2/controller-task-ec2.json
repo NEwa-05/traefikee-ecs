@@ -1,0 +1,98 @@
+{
+    "family": "ec2-traefikee",    
+    "taskRoleArn": "arn:aws:iam::${account-id}:role/TraefikECSReadAccessRole",
+    "executionRoleArn": "arn:aws:iam::${account-id}:role/ecsTaskExecutionRole",
+    "cpu": "512",
+    "memory": "1024",
+    "containerDefinitions": [
+        {
+            "name": "controller",
+            "image": "traefik/traefikee:v2.6.1",
+            "cpu": 500,
+            "links": [],
+            "portMappings": [
+                {
+                    "containerPort": 55055,
+                    "hostPort": 55055,
+                    "protocol": "tcp"
+                },
+                {
+                    "containerPort": 4242,
+                    "hostPort": 4242,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "command": [
+                "controller",
+                "--name=controller",
+                "--advertise=controller.traefikee:4242",
+                "--statedir=/data/state",
+                "--jointoken.file.path=/data/tokens",
+                "--api.autocerts",
+                "--plugin.url=https://${registry_instance_ip}:443"
+            ],
+            "linuxParameters": {
+                "initProcessEnabled": true
+            },
+            "entryPoint": [],
+            "environment": [],
+            "environmentFiles": [],
+            "secrets": [
+                {
+                    "name": "TRAEFIKEE_LICENSE",
+                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:traefikee-secret-cWNokO:TRAEFIKEE_LICENSE::"
+                },
+                {
+                    "name": "TRAEFIKEE_PLUGIN_TOKEN",
+                    "valueFrom": "arn:aws:secretsmanager:eu-north-1:${account-id}:secret:traefikee-secret-cWNokO:TRAEFIKEE_PLUGIN_TOKEN::"
+                }
+            ],
+            "volumesFrom": [],
+            "dockerLabels": {
+                "com.traefik.traefikee.component": "controller"
+            },
+            "mountPoints": [
+                {
+                    "sourceVolume": "traefikee-data",
+                    "containerPath": "/data",
+                    "readOnly": false
+                }
+            ],
+            "dnsServers": [],
+            "dnsSearchDomains": [],
+            "extraHosts": [],
+            "dockerSecurityOptions": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "ecs/traefikee",
+                    "awslogs-region": "eu-north-1",
+                    "awslogs-stream-prefix": "controller"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "volumes": [
+        {
+            "name": "traefikee-data",       
+            "dockerVolumeConfiguration": {
+                "scope": "shared",
+                "autoprovision": true,
+                "driver": "local"                
+            }   
+        }
+    ],
+    "placementConstraints": [],
+    "networkMode": "host",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": [
+        "EC2"
+    ]
+}

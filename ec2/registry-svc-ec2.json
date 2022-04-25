@@ -1,0 +1,13 @@
+{
+    "serviceName": "traefikee-registry",
+    "taskDefinition": "ec2-traefikee-rgs",
+    "desiredCount": 1,
+    "launchType": "EC2",    
+    "schedulingStrategy": "REPLICA",
+    "placementConstraints": [
+        {
+          "expression": "attribute:registry == true",
+          "type": "memberOf"
+        }
+      ]
+}
